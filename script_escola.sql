@@ -1,5 +1,4 @@
 create database EscolaCiceroNogueira;
-
 CREATE SCHEMA alunos_data;
 CREATE SCHEMA professores_data;
 CREATE SCHEMA disciplinas_data;
@@ -9,7 +8,7 @@ create schema Rh_data;
 
 
 -- ALUNOS 
-create table if not exists alunos_data.alunos(
+create table if not exists alunos_data.alunos( -- preencher 5° 
     aluno_id serial primary key,
     nome varchar(100) not null,
     cpf varchar(14) not null unique,
@@ -19,8 +18,7 @@ create table if not exists alunos_data.alunos(
     nome_responsavel varchar(100) not null
 );
 
-
-create table if not exists alunos_data.matriculas(
+create table if not exists alunos_data.matriculas( -- preencher 6°
     matricula_id serial primary key,
     aluno_id integer not null,
     grade_id integer not null,
@@ -34,7 +32,7 @@ create table if not exists alunos_data.matriculas(
     Foreign Key (grade_id) REFERENCES disciplinas_data.grade_serie(grade_id) ON DELETE CASCADE
 );
 
-create table if not exists alunos_data.frequencia_alunos(
+create table if not exists alunos_data.frequencia_alunos( -- preencher 9° 
     frequencia_id serial primary key,
     matricula_id integer not null,
     total_aulas integer not null,
@@ -45,7 +43,7 @@ create table if not exists alunos_data.frequencia_alunos(
     Foreign Key (matricula_id) REFERENCES alunos_data.matriculas(matricula_id)ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS avaliacoes (
+CREATE TABLE IF NOT EXISTS avaliacoes ( -- preencher 8 ° 
     avaliacao_id serial primary key,
     matricula_id integer not null,
     professor_id integer not null,
@@ -62,13 +60,13 @@ CREATE TABLE IF NOT EXISTS avaliacoes (
 
 
 -- disciplinas 
-create table if not exists disciplinas_data.disciplinas(
+create table if not exists disciplinas_data.disciplinas( -- preencher 1°
     disciplina_id serial primary key,
     nome varchar(100) not null,
     descricao varchar(100) not null
 ) 
 
-create table if not exists disciplinas_data.grade_serie(
+create table if not exists disciplinas_data.grade_serie( -- preencher 4°
     grade_id serial primary key,
     disciplina_id integer not null,
     serie varchar(50) not null,
@@ -79,7 +77,7 @@ create table if not exists disciplinas_data.grade_serie(
 
 -- relacionamento disciplina com professores
 
-create table if not exists disciplinas_data.disciplinas_professores(
+create table if not exists disciplinas_data.disciplinas_professores( -- preencher 7° 
     professor_id integer not null,
     disciplina_id integer not NULL,
     primary key(professor_id, disciplina_id),
@@ -89,7 +87,7 @@ create table if not exists disciplinas_data.disciplinas_professores(
  
 -- professors_data
 
-create table if not exists professores_data.professores(
+create table if not exists professores_data.professores( -- preencher 3°
     professor_id serial primary key,
     cargo_id integer not null,
     nome varchar(100) not null,
@@ -101,11 +99,23 @@ create table if not exists professores_data.professores(
 );
 
 
- -- rh_data
-
-create table if not exists rh_data.cargos(
+-- rh_data
+create table if not exists rh_data.cargos( -- preencher 2° 
     cargo_id serial primary key,
     nome varchar(100) not null,
     descricao varchar(100) not null,
     salario_base decimal(10,2)
+);
+
+-- auditor_logs_data
+
+create table if not exists auditor_logs_data.logs(
+    log_id serial primary key,
+    tabela_afetada varchar(100) not null,
+    dados_alterado_antigos JSONB,
+    dados_novos JSONB, 
+    operacao varchar(20) not null,
+    usuario varchar(30) default CURRENT_USER,
+    data_operacao TIMESTAMP default CURRENT_TIMESTAMP,
+    sucesso BOOLEAN default TRUE
 );
