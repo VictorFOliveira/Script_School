@@ -25,19 +25,25 @@ create table if not exists alunos_data.matriculas(
     aluno_id integer not null,
     grade_id integer not null,
     serie_atual varchar(20) not null,
+    turno varchar(10) not null,
     ano_letivo date default CURRENT_DATE,
     semestre_atual integer check(semestre_atual in (1 , 2 , 3 ,4)),
+    valor decimal(10,2) not null,
     data_matricula date default CURRENT_DATE,
     Foreign Key (aluno_id) REFERENCES alunos_data.alunos (aluno_id) ON DELETE CASCADE,
     Foreign Key (grade_id) REFERENCES disciplinas_data.grade_serie(grade_id) ON DELETE CASCADE
 );
 
-create table if not exists alunos_data.alunos_historico(
-    historico_id serial primary key,
-    avaliacao_id integer,
-
-
-)
+create table if not exists alunos_data.frequencia_alunos(
+    frequencia_id serial primary key,
+    matricula_id integer not null,
+    total_aulas integer not null,
+    total_presente integer not null,
+    total_faltas integer not null,
+    oberservacao varchar(100),
+    situacao varchar(15) check(situacao in('aprovado','reprovado', 'recuperacao')),
+    Foreign Key (matricula_id) REFERENCES alunos_data.matriculas(matricula_id)ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS avaliacoes (
     avaliacao_id serial primary key,
